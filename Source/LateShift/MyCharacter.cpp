@@ -38,12 +38,18 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::Move(const FInputActionValue& Value)
 {
-
-    UE_LOG(LogTemp, Warning, TEXT("Move function work"));
     FVector2D Input = Value.Get<FVector2D>();
 
-    AddMovementInput(GetActorForwardVector(), Input.Y);
-    AddMovementInput(GetActorRightVector(), Input.X);
+    AddMovementInput(GetActorForwardVector(), Input.Y * velocity);
+    AddMovementInput(GetActorRightVector(), Input.X * velocity);
+}
+
+void AMyCharacter::Mouse(const FInputActionValue& Value)
+{
+    FVector2D Input = Value.Get<FVector2D>();
+
+    AddControllerYawInput(Input.X * sensitivity);
+    AddControllerPitchInput((Input.Y * -1)* sensitivity);
 }
 
 // Called to bind functionality to input
@@ -53,6 +59,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     UEnhancedInputComponent* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
     EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
+    EnhancedInput->BindAction(MouseAction, ETriggerEvent::Triggered, this, &AMyCharacter::Mouse);
 }
 
 

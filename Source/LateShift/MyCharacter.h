@@ -22,6 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
+	void Mouse(const struct FInputActionValue& Value);
 	void Move(const struct FInputActionValue& Value);
 
 public:	
@@ -36,4 +37,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MouseAction;
+
+	UPROPERTY(EditAnyWhere)
+	double velocity;
+
+	UPROPERTY(EditAnyWhere)
+	double sensitivity;
 };
