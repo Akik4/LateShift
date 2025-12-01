@@ -1,0 +1,35 @@
+# ========= Unreal Engine =========
+
+# Binaries
+Binaries/
+Build/
+DerivedDataCache/
+.vsconfig
+
+# Saved (autosaves, backup…)
+Saved/
+
+# Intermediate (compilations temporaires)
+Intermediate/
+
+# Config spécifique machine
+*.VC.db
+*.VC.opendb
+
+# Project user settings
+*.sln
+*.user
+*.userprefs
+
+# Plugins nativement compilés
+Plugins/*/Intermediate/
+Plugins/*/Binaries/
+
+# Ignore caches
+.vs/
+.vscode/
+
+# Ignore fichiers Temporaires
+Thumbs.db
+*.tmp
+*.temp
