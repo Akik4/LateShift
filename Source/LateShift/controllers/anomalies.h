@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../MyGameStateBase.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "anomalies.generated.h"
