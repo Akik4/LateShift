@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "LateShift/controllers/anomalies.h"
+#include "Camera/CameraComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "EnhancedInputComponent.h"
@@ -28,6 +29,7 @@ protected:
 	void Mouse(const struct FInputActionValue& Value);
 	void Move(const struct FInputActionValue& Value);
 	void RightClick(const struct FInputActionValue& Value);
+	void Interact(const struct FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -36,6 +38,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	class UCameraComponent* CameraComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* InputMappingContext;
 
@@ -46,6 +50,8 @@ public:
 	UInputAction* MouseAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MouseClick;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* IA_Interact;
 
 	UPROPERTY(EditAnyWhere)
 	double velocity;

@@ -9,6 +9,14 @@ AMyCharacter::AMyCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    // Create camera
+    CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+    CameraComponent->SetupAttachment(RootComponent);
+
+    // Adjust camera position
+    CameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f));
+    CameraComponent->bUsePawnControlRotation = true; // Makes camera rotate with mouse
+
 }
 
 // Called when the game starts or when spawned
@@ -52,14 +60,37 @@ void AMyCharacter::Mouse(const FInputActionValue& Value)
     AddControllerPitchInput((Input.Y * -1)* sensitivity);
 }
 
+void AMyCharacter::Interact(const FInputActionValue& value)
+{
+    FVector start = CameraComponent->GetComponentLocation();
+    FVector end = start + CameraComponent->GetForwardVector() * 200;
+
+    FHitResult HitResult;
+
+    FCollisionQueryParams params;
+    params.AddIgnoredActor(this);
+
+    if (GetWorld()->LineTraceSingleByChannel(
+        HitResult,
+        start,
+        end,
+        ECC_EngineTraceChannel2,
+        params
+    )) {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Interact"));
+    }
+
+}
 
 void AMyCharacter::RightClick(const FInputActionValue& Value) {
     ETraceTypeQuery channel = UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel1);   
     TArray<FHitResult> hitResult = TArray<FHitResult>();
-    FVector end = GetActorLocation() + UKismetMathLibrary::Multiply_VectorFloat(GetActorForwardVector(), 1000);
+
+    FVector start = CameraComponent->GetComponentLocation() + CameraComponent->GetForwardVector() * 525;
+    FVector end = start + CameraComponent->GetForwardVector() * 475;
     UKismetSystemLibrary::SphereTraceMulti(
         GetWorld(),
-        AMyCharacter::GetActorLocation(),
+        start,
         end,
         500,
         channel,
@@ -88,6 +119,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
     EnhancedInput->BindAction(MouseAction, ETriggerEvent::Triggered, this, &AMyCharacter::Mouse);
     EnhancedInput->BindAction(MouseClick, ETriggerEvent::Started, this, &AMyCharacter::RightClick);
+    EnhancedInput->BindAction(IA_Interact, ETriggerEvent::Started, this, &AMyCharacter::Interact);
 }
 
 
