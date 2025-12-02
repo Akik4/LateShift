@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LateShift/controllers/anomalies.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/Character.h"
@@ -24,6 +27,7 @@ protected:
 	UFUNCTION()
 	void Mouse(const struct FInputActionValue& Value);
 	void Move(const struct FInputActionValue& Value);
+	void RightClick(const struct FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -40,6 +44,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MouseAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MouseClick;
 
 	UPROPERTY(EditAnyWhere)
 	double velocity;

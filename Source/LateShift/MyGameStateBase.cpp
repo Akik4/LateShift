@@ -9,6 +9,12 @@ void AMyGameStateBase::AddAnomalie()
 	UE_LOG(LogTemp, Warning, TEXT("Added anomalie, actually : %i"), anomalies);
 }
 
+void AMyGameStateBase::RemoveAnomalie()
+{
+	anomalies--;
+	UE_LOG(LogTemp, Warning, TEXT("Added anomalie, actually : %i"), anomalies);
+}
+
 int AMyGameStateBase::GetAnomalie()
 {
 	return anomalies;

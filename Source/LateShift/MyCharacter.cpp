@@ -52,6 +52,33 @@ void AMyCharacter::Mouse(const FInputActionValue& Value)
     AddControllerPitchInput((Input.Y * -1)* sensitivity);
 }
 
+
+void AMyCharacter::RightClick(const FInputActionValue& Value) {
+    ETraceTypeQuery channel = UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel1);   
+    TArray<FHitResult> hitResult = TArray<FHitResult>();
+    FVector end = GetActorLocation() + UKismetMathLibrary::Multiply_VectorFloat(GetActorForwardVector(), 1000);
+    UKismetSystemLibrary::SphereTraceMulti(
+        GetWorld(),
+        AMyCharacter::GetActorLocation(),
+        end,
+        500,
+        channel,
+        true,
+        {},
+        EDrawDebugTrace::ForDuration,
+        hitResult,
+        true
+        );
+
+    AActor* actor;
+    for (int i = 0; i < hitResult.Num(); i++) {
+        actor = hitResult[i].GetActor();
+        actor->Destroy();
+        AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
+        e->RemoveAnomalie();
+    }
+}
+
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -60,6 +87,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
     EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
     EnhancedInput->BindAction(MouseAction, ETriggerEvent::Triggered, this, &AMyCharacter::Mouse);
+    EnhancedInput->BindAction(MouseClick, ETriggerEvent::Started, this, &AMyCharacter::RightClick);
 }
 
 

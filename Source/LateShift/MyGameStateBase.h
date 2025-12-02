@@ -21,6 +21,7 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	void AddAnomalie();
+	void RemoveAnomalie();
 	
 	int GetAnomalie();
 	
