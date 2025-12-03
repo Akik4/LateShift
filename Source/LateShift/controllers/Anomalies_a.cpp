@@ -5,24 +5,6 @@
 
 AAnomalies_a::AAnomalies_a()
 {
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-
-	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	Mesh->SetCollisionObjectType(ECC_WorldDynamic);
-	Mesh->SetCollisionResponseToAllChannels(ECR_Block);
-	Mesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-	Mesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
-	Mesh->SetGenerateOverlapEvents(true);
-
-	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-	BoxCollision->SetBoxExtent(FVector(50, 50, 50));
-	BoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	BoxCollision->SetCollisionResponseToAllChannels(ECR_Block);
-
-	RootComponent = Mesh;
-	BoxCollision->SetupAttachment(Mesh);
-
-
 	bIsRevealed = true;
 }
 

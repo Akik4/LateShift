@@ -63,7 +63,7 @@ void AMyCharacter::Mouse(const FInputActionValue& Value)
 void AMyCharacter::Interact(const FInputActionValue& value)
 {
     FVector start = CameraComponent->GetComponentLocation();
-    FVector end = start + CameraComponent->GetForwardVector() * 200;
+    FVector end = start + CameraComponent->GetForwardVector() * 500;
 
     FHitResult HitResult;
 
@@ -78,10 +78,17 @@ void AMyCharacter::Interact(const FInputActionValue& value)
         params
     )) {
         AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
+        ULateShiftInstance* GI = GetGameInstance<ULateShiftInstance>();
         if (e->GetAnomalie() == 0) {
+            UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
+            GI->AddLooped();
             GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("WIN"));
         }
         else {
+            UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
+            if (GI->GetLooped() > 1) {
+                GI->RemoveLooped();
+            }
             GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("LOSE"));
         }
     }
@@ -93,7 +100,7 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
     TArray<FHitResult> hitResult = TArray<FHitResult>();
 
     FVector start = CameraComponent->GetComponentLocation() + CameraComponent->GetForwardVector() * 525;
-    FVector end = start + CameraComponent->GetForwardVector() * 475;
+    FVector end = start + CameraComponent->GetForwardVector() * range;
     UKismetSystemLibrary::SphereTraceMulti(
         GetWorld(),
         start,
@@ -102,7 +109,7 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
         channel,
         true,
         {},
-        EDrawDebugTrace::ForDuration,
+        EDrawDebugTrace::None,
         hitResult,
         true
         );

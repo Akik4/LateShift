@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LateShift/LateShiftInstance.h"
+#include "Components/BoxComponent.h"
+#include "LateShift/MyGameStateBase.h"
 #include "GameFramework/Pawn.h"
 #include "anomalies.generated.h"
 
@@ -26,6 +29,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Mesh;
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* BoxCollision;
 
 	UPROPERTY(EditAnywhere)
 	bool isAppeared;

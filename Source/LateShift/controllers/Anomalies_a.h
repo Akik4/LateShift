@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "LateShift/MyGameStateBase.h"
-#include "Components/BoxComponent.h"
 #include "anomalies.h"
 #include "Anomalies_a.generated.h"
 
@@ -25,11 +24,6 @@ private:
 
 	
 public:
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* BoxCollision;
-
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsRevealed = false;
 

@@ -8,10 +8,12 @@ void AAnomalies_d::Init()
 	Super::Init();
 
 	if (!isAppeared) {
+		BoxCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 		Destroy();
 	}
 	else {
 		if (GetWorld() != NULL) {
+		
 			AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
 			e->AddAnomalie();
 		}

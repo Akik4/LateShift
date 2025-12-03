@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "LateShift/controllers/anomalies.h"
+#include "LateShift/LateShiftInstance.h"
+#include "Kismet/GameplayStatics.h"
 #include "LateShift/MyGameStateBase.h"
 #include "LateShift/controllers/Anomalies_a.h"
 #include "LateShift/controllers/Anomalies_d.h"
@@ -61,4 +63,6 @@ public:
 
 	UPROPERTY(EditAnyWhere)
 	double sensitivity;
+	UPROPERTY(EditAnyWhere)
+	int range;
 };
