@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "LateShift/controllers/anomalies.h"
+#include "LateShift/MyGameStateBase.h"
+#include "LateShift/controllers/Anomalies_a.h"
+#include "LateShift/controllers/Anomalies_d.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"

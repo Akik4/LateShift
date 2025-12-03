@@ -77,7 +77,13 @@ void AMyCharacter::Interact(const FInputActionValue& value)
         ECC_EngineTraceChannel2,
         params
     )) {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Interact"));
+        AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
+        if (e->GetAnomalie() == 0) {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("WIN"));
+        }
+        else {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("LOSE"));
+        }
     }
 
 }
@@ -104,9 +110,19 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
     AActor* actor;
     for (int i = 0; i < hitResult.Num(); i++) {
         actor = hitResult[i].GetActor();
-        actor->Destroy();
-        AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
-        e->RemoveAnomalie();
+
+        if (AAnomalies_a* A = Cast<AAnomalies_a>(actor)) {
+            A->Appear();
+            AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
+            e->RemoveAnomalie();
+        } 
+
+        if (AAnomalies_d* D = Cast<AAnomalies_d>(actor)) {
+            D->Destroy();
+            AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
+            e->RemoveAnomalie();
+        }
+        
     }
 }
 

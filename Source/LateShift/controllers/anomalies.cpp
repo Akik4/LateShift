@@ -14,20 +14,12 @@ Aanomalies::Aanomalies()
 void Aanomalies::BeginPlay()
 {
 	Super::BeginPlay();
+	Init();
+}
 
-	isAppeared = 0 + (rand() % (1 - 0 + 1)) == 1;
-
-
-
-	if (!isAppeared) {
-		Destroy();
-	}
-	else {
-		if (GetWorld() != NULL) {
-			AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
-			e->AddAnomalie();
-		}
-	}
+void Aanomalies::Init()
+{
+	isAppeared = (rand() % Aanomalies::rand_int) == 0;
 }
 
 // Called every frame

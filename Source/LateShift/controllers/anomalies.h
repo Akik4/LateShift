@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "../MyGameStateBase.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "anomalies.generated.h"
@@ -19,6 +18,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void Init();
 
 public:	
 	// Called every frame
@@ -30,5 +30,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool isAppeared;
 
+	UPROPERTY(EditAnywhere)
+	int rand_int;
 
 };
