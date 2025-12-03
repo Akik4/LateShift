@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "LateShift/controllers/anomalies.h"
+#include "LateShift/Next.h"
 #include "LateShift/LateShiftInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "LateShift/MyGameStateBase.h"

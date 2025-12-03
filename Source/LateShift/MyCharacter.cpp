@@ -77,19 +77,21 @@ void AMyCharacter::Interact(const FInputActionValue& value)
         ECC_EngineTraceChannel2,
         params
     )) {
-        AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
-        ULateShiftInstance* GI = GetGameInstance<ULateShiftInstance>();
-        if (e->GetAnomalie() == 0) {
-            UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
-            GI->AddLooped();
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("WIN"));
-        }
-        else {
-            UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
-            if (GI->GetLooped() > 1) {
-                GI->RemoveLooped();
+        if (ANext* A = Cast<ANext>(HitResult.GetActor())) {
+            AMyGameStateBase* e = GetWorld()->GetGameState<AMyGameStateBase>();
+            ULateShiftInstance* GI = GetGameInstance<ULateShiftInstance>();
+            if (e->GetAnomalie() == 0) {
+                UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
+                GI->AddLooped();
+                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("WIN"));
             }
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("LOSE"));
+            else {
+                UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
+                if (GI->GetLooped() > 1) {
+                    GI->RemoveLooped();
+                }
+                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("LOSE"));
+            }
         }
     }
 
