@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "Engine/GameInstance.h"
 #include "LateShiftInstance.generated.h"
 
@@ -19,6 +20,12 @@ private:
 	UPROPERTY()
 	int looped;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> MainMenuClass;
+
+	UPROPERTY()
+	UUserWidget* MainMenuInstance;
+
 public:
 	void AddLooped();
 
@@ -27,5 +34,14 @@ public:
 	void RemoveLooped();
 
 	int GetLooped();
+
+	UFUNCTION(BlueprintCallable)
+	void ShowMainMenu();
+
+	UFUNCTION(BlueprintCallable)
+	void StartGame();
+
+	UFUNCTION(BlueprintCallable)
+	void QuitGame();
 	
 };

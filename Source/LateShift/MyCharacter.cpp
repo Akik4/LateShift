@@ -2,6 +2,7 @@
 
 
 #include "MyCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -135,6 +136,50 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
     }
 }
 
+void AMyCharacter::TogglePause(const FInputActionValue& Value)
+{
+    APlayerController* PC = Cast<APlayerController>(GetController());
+    if (!PC) return;
+
+    bIsPaused = !bIsPaused; // toggle pause state
+
+    if (bIsPaused)
+    {
+        if (!PauseMenuInstance && PauseMenuClass)
+        {
+            PauseMenuInstance = CreateWidget<UPauseMenuWidget>(PC, PauseMenuClass);
+        }
+
+        if (PauseMenuInstance && !PauseMenuInstance->IsInViewport())
+        {
+            PauseMenuInstance->AddToViewport();
+        }
+
+        PC->SetPause(true);
+        PC->bShowMouseCursor = true;
+
+        FInputModeUIOnly InputMode;
+        InputMode.SetWidgetToFocus(PauseMenuInstance->TakeWidget());
+        PC->SetInputMode(InputMode);
+    }
+    else
+    {
+        if (PauseMenuInstance && PauseMenuInstance->IsInViewport())
+        {
+            PauseMenuInstance->RemoveFromParent();
+        }
+
+        PC->SetPause(false);
+        PC->bShowMouseCursor = false;
+
+        FInputModeGameOnly InputMode;
+        PC->SetInputMode(InputMode);
+    }
+}
+
+
+
+
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -145,6 +190,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     EnhancedInput->BindAction(MouseAction, ETriggerEvent::Triggered, this, &AMyCharacter::Mouse);
     EnhancedInput->BindAction(MouseClick, ETriggerEvent::Started, this, &AMyCharacter::RightClick);
     EnhancedInput->BindAction(IA_Interact, ETriggerEvent::Started, this, &AMyCharacter::Interact);
+    EnhancedInput->BindAction(IA_Pause, ETriggerEvent::Triggered, this, &AMyCharacter::TogglePause);
 }
 
 

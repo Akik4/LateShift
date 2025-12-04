@@ -8,6 +8,7 @@
 #include "LateShift/LateShiftInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "LateShift/MyGameStateBase.h"
+#include "LateShift/PauseMenuWidget.h"
 #include "LateShift/controllers/Anomalies_a.h"
 #include "LateShift/controllers/Anomalies_d.h"
 #include "Camera/CameraComponent.h"
@@ -36,6 +37,7 @@ protected:
 	void Move(const struct FInputActionValue& Value);
 	void RightClick(const struct FInputActionValue& Value);
 	void Interact(const struct FInputActionValue& Value);
+	void TogglePause(const struct FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -58,6 +60,9 @@ public:
 	UInputAction* MouseClick;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* IA_Interact;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* IA_Pause;
 
 	UPROPERTY(EditAnyWhere)
 	double velocity;
@@ -66,4 +71,16 @@ public:
 	double sensitivity;
 	UPROPERTY(EditAnyWhere)
 	int range;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UPauseMenuWidget> PauseMenuClass;
+
+	UPauseMenuWidget* PauseMenuInstance = nullptr;
+
+	bool bIsPaused = false;
+
+	UPROPERTY(EditAnywhere)
+	UInputMappingContext* IMC;
+
+	FKey PauseKey;
 };
