@@ -107,6 +107,20 @@ void AMyCharacter::Interact(const FInputActionValue& value)
 
 void AMyCharacter::RightClick(const FInputActionValue& Value) {
 
+    if (!bCanRightClick)
+    {
+        return;
+    }
+
+    bCanRightClick = false;
+    GetWorldTimerManager().SetTimer(
+        RightClickCooldownHandle,
+        this,
+        &AMyCharacter::ResetRightClickCooldown,
+        RightClickCooldown,
+        false
+    );
+
     StartCameraFlashSequence();
 
     ETraceTypeQuery channel = UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel1);   
@@ -144,6 +158,10 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
         }
         
     }
+}
+void AMyCharacter::ResetRightClickCooldown()
+{
+    bCanRightClick = true;
 }
 void AMyCharacter::StartCameraFlashSequence()
 {

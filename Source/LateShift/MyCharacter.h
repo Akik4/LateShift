@@ -65,6 +65,15 @@ protected:
 
 	void HandleFlashStep();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RightClick")
+	float RightClickCooldown = 1.0f;
+
+	bool bCanRightClick = true;
+
+	FTimerHandle RightClickCooldownHandle;
+
+	void ResetRightClickCooldown();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
