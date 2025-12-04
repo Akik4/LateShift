@@ -40,7 +40,34 @@ void AMyCharacter::BeginPlay()
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
+
+    FVector Vel = GetVelocity();
+    float SpeedSq = Vel.SizeSquared();
+
+    bIsMoving = SpeedSq > FMath::Square(MovementSpeedThreshold);
+
+
+    if (bIsMoving && !bFootstepTimerActive)
+    {
+        float Interval = FootstepInterval;
+
+        GetWorldTimerManager().SetTimer(
+            FootstepTimerHandle,
+            this,
+            &AMyCharacter::PlayFootstep,
+            Interval,
+            true,
+            0.f
+        );
+
+        bFootstepTimerActive = true;
+    }
+    else if ((!bIsMoving) && bFootstepTimerActive)
+    {
+        GetWorldTimerManager().ClearTimer(FootstepTimerHandle);
+        bFootstepTimerActive = false;
+    }
 
 }
 
@@ -50,6 +77,15 @@ void AMyCharacter::Move(const FInputActionValue& Value)
 
     AddMovementInput(GetActorForwardVector(), Input.Y * velocity);
     AddMovementInput(GetActorRightVector(), Input.X * velocity);
+}
+
+void AMyCharacter::PlayFootstep()
+{
+    UGameplayStatics::PlaySoundAtLocation(
+        this,
+        FootstepSound,
+        GetActorLocation()
+    );
 }
 
 void AMyCharacter::Mouse(const FInputActionValue& Value)

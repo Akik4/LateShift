@@ -34,6 +34,7 @@ protected:
 	UFUNCTION()
 	void Mouse(const struct FInputActionValue& Value);
 	void Move(const struct FInputActionValue& Value);
+	void PlayFootstep();
 	void RightClick(const struct FInputActionValue& Value);
 	void Interact(const struct FInputActionValue& Value);
 
@@ -43,6 +44,19 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Audio")
+	USoundBase* FootstepSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Footsteps")
+	float MovementSpeedThreshold = 10.f;
+
+	FTimerHandle FootstepTimerHandle;
+	bool bFootstepTimerActive = false;
+
+	bool bIsMoving = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float FootstepInterval = 0.45f; // delay between steps when walking
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* CameraComponent;
