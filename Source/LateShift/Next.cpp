@@ -9,6 +9,13 @@ ANext::ANext()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractionWidget"));
+	InteractionWidget->SetupAttachment(RootComponent);
+
+	InteractionWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	InteractionWidget->SetDrawSize(FVector2D(175.f, 100.f));
+	InteractionWidget->SetVisibility(false); // hidden by default
+
 }
 
 // Called when the game starts or when spawned

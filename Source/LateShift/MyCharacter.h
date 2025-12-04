@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EngineUtils.h" // <-- needed for TActorIterator
 #include "LateShift/controllers/anomalies.h"
 #include "LateShift/Next.h"
 #include "LateShift/LateShiftInstance.h"
@@ -35,11 +36,14 @@ protected:
 
 	UFUNCTION()
 	void Mouse(const struct FInputActionValue& Value);
+	void ShowInterface();
 	void Move(const struct FInputActionValue& Value);
 	void PlayFootstep();
 	void PlayPhoto();
 	void RightClick(const struct FInputActionValue& Value);
 	void Interact(const struct FInputActionValue& Value);
+
+	void HideAllInteractionWidgets();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Flash", meta = (AllowPrivateAccess = "true"))
 	UPointLightComponent* FlashLight;

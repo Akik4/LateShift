@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Next.generated.h"
 
@@ -14,6 +15,9 @@ class LATESHIFT_API ANext : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ANext();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UWidgetComponent* InteractionWidget;
 
 protected:
 	// Called when the game starts or when spawned

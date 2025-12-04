@@ -50,6 +50,8 @@ void AMyCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    ShowInterface();
+
     FVector Vel = GetVelocity();
     float SpeedSq = Vel.SizeSquared();
 
@@ -111,6 +113,44 @@ void AMyCharacter::Mouse(const FInputActionValue& Value)
 
     AddControllerYawInput(Input.X * sensitivity);
     AddControllerPitchInput((Input.Y * -1)* sensitivity);
+}
+
+void AMyCharacter::ShowInterface()
+{
+        FVector start = CameraComponent->GetComponentLocation();
+    FVector end = start + CameraComponent->GetForwardVector() * 500;
+
+    FHitResult HitResult;
+
+    FCollisionQueryParams params;
+    params.AddIgnoredActor(this);
+
+    if (GetWorld()->LineTraceSingleByChannel(
+        HitResult,
+        start,
+        end,
+        ECC_EngineTraceChannel2,
+        params
+    )) {
+        AActor* HitActor = HitResult.GetActor();
+        if (UWidgetComponent* Widget = HitActor->FindComponentByClass<UWidgetComponent>())
+        {
+            Widget->SetVisibility(true);
+        } 
+    } else {
+        HideAllInteractionWidgets();
+    }
+}
+
+void AMyCharacter::HideAllInteractionWidgets()
+{
+    for (TActorIterator<AActor> It(GetWorld()); It; ++It)
+    {
+        if (UWidgetComponent* Widget = It->FindComponentByClass<UWidgetComponent>())
+        {
+            Widget->SetVisibility(false);
+        }
+    }
 }
 
 void AMyCharacter::Interact(const FInputActionValue& value)
