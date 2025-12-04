@@ -37,7 +37,6 @@ protected:
 	void Move(const struct FInputActionValue& Value);
 	void RightClick(const struct FInputActionValue& Value);
 	void Interact(const struct FInputActionValue& Value);
-	void TogglePause(const struct FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -79,8 +78,6 @@ public:
 
 	bool bIsPaused = false;
 
-	UPROPERTY(EditAnywhere)
-	UInputMappingContext* IMC;
-
-	FKey PauseKey;
+	UFUNCTION()
+	void TogglePause(const struct FInputActionValue& Value);
 };

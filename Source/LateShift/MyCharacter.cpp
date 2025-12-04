@@ -47,6 +47,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::Move(const FInputActionValue& Value)
 {
+    if (bIsPaused) return;
     FVector2D Input = Value.Get<FVector2D>();
 
     AddMovementInput(GetActorForwardVector(), Input.Y * velocity);
@@ -55,6 +56,7 @@ void AMyCharacter::Move(const FInputActionValue& Value)
 
 void AMyCharacter::Mouse(const FInputActionValue& Value)
 {
+    if (bIsPaused) return;
     FVector2D Input = Value.Get<FVector2D>();
 
     AddControllerYawInput(Input.X * sensitivity);
@@ -141,7 +143,7 @@ void AMyCharacter::TogglePause(const FInputActionValue& Value)
     APlayerController* PC = Cast<APlayerController>(GetController());
     if (!PC) return;
 
-    bIsPaused = !bIsPaused; // toggle pause state
+    bIsPaused = !bIsPaused;
 
     if (bIsPaused)
     {
@@ -155,12 +157,14 @@ void AMyCharacter::TogglePause(const FInputActionValue& Value)
             PauseMenuInstance->AddToViewport();
         }
 
-        PC->SetPause(true);
-        PC->bShowMouseCursor = true;
-
-        FInputModeUIOnly InputMode;
+        FInputModeGameAndUI InputMode;
         InputMode.SetWidgetToFocus(PauseMenuInstance->TakeWidget());
+        InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
         PC->SetInputMode(InputMode);
+
+        PC->bShowMouseCursor = true;
+        PC->SetPause(true);
+
     }
     else
     {
@@ -169,11 +173,11 @@ void AMyCharacter::TogglePause(const FInputActionValue& Value)
             PauseMenuInstance->RemoveFromParent();
         }
 
-        PC->SetPause(false);
-        PC->bShowMouseCursor = false;
-
         FInputModeGameOnly InputMode;
         PC->SetInputMode(InputMode);
+
+        PC->bShowMouseCursor = false;
+        PC->SetPause(false);
     }
 }
 
@@ -190,7 +194,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     EnhancedInput->BindAction(MouseAction, ETriggerEvent::Triggered, this, &AMyCharacter::Mouse);
     EnhancedInput->BindAction(MouseClick, ETriggerEvent::Started, this, &AMyCharacter::RightClick);
     EnhancedInput->BindAction(IA_Interact, ETriggerEvent::Started, this, &AMyCharacter::Interact);
-    EnhancedInput->BindAction(IA_Pause, ETriggerEvent::Triggered, this, &AMyCharacter::TogglePause);
+    EnhancedInput->BindAction(IA_Pause, ETriggerEvent::Started, this, &AMyCharacter::TogglePause);
 }
 
 
