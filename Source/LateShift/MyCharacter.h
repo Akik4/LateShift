@@ -15,6 +15,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Components/PointLightComponent.h"
+#include "TimerManager.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
@@ -36,6 +38,32 @@ protected:
 	void Move(const struct FInputActionValue& Value);
 	void RightClick(const struct FInputActionValue& Value);
 	void Interact(const struct FInputActionValue& Value);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Flash", meta = (AllowPrivateAccess = "true"))
+	UPointLightComponent* FlashLight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Flash")
+	float FlashIntensity = 400000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Flash")
+	float PreFlashIntensityFactor = 0.6f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Flash")
+	float FlashOnTime = 0.05f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Flash")
+	float FlashOffTime = 0.06f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Flash")
+	int32 TotalFlashes = 2;
+
+	FTimerHandle FlashTimerHandle;
+	int32 CurrentFlashIndex = 0;
+	bool bFlashIsOn = false;
+
+	void StartCameraFlashSequence();
+
+	void HandleFlashStep();
 
 public:	
 	// Called every frame

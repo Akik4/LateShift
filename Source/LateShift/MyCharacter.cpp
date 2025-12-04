@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "MyCharacter.h"
@@ -17,6 +17,14 @@ AMyCharacter::AMyCharacter()
     CameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f));
     CameraComponent->bUsePawnControlRotation = true; // Makes camera rotate with mouse
 
+
+    FlashLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("FlashLight"));
+    FlashLight->SetupAttachment(CameraComponent);
+
+    FlashLight->SetVisibility(false);          
+    FlashLight->SetIntensity(3000); 
+    FlashLight->AttenuationRadius = 3000.f;    
+    FlashLight->bUseInverseSquaredFalloff = true;
 }
 
 // Called when the game starts or when spawned
@@ -98,6 +106,9 @@ void AMyCharacter::Interact(const FInputActionValue& value)
 }
 
 void AMyCharacter::RightClick(const FInputActionValue& Value) {
+
+    StartCameraFlashSequence();
+
     ETraceTypeQuery channel = UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel1);   
     TArray<FHitResult> hitResult = TArray<FHitResult>();
 
@@ -134,6 +145,65 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
         
     }
 }
+void AMyCharacter::StartCameraFlashSequence()
+{
+    if (!FlashLight || TotalFlashes <= 0)
+        return;
+
+    GetWorldTimerManager().ClearTimer(FlashTimerHandle);
+    CurrentFlashIndex = 0;
+    bFlashIsOn = false;
+
+    HandleFlashStep();
+}
+
+void AMyCharacter::HandleFlashStep()
+{
+    if (!FlashLight)
+        return;
+
+    if (!bFlashIsOn)
+    {
+        float IntensityToUse = FlashIntensity;
+        if (CurrentFlashIndex == 0) // pré-flash
+        {
+            IntensityToUse = FlashIntensity * PreFlashIntensityFactor;
+        }
+
+        FlashLight->SetIntensity(IntensityToUse);
+        FlashLight->SetVisibility(true);
+        bFlashIsOn = true;
+
+        GetWorldTimerManager().SetTimer(
+            FlashTimerHandle,
+            this,
+            &AMyCharacter::HandleFlashStep,
+            FlashOnTime,
+            false
+        );
+    }
+    else
+    {
+        FlashLight->SetVisibility(false);
+        bFlashIsOn = false;
+        CurrentFlashIndex++;
+
+        if (CurrentFlashIndex >= TotalFlashes)
+        {
+            GetWorldTimerManager().ClearTimer(FlashTimerHandle);
+            return;
+        }
+
+        GetWorldTimerManager().SetTimer(
+            FlashTimerHandle,
+            this,
+            &AMyCharacter::HandleFlashStep,
+            FlashOffTime,
+            false
+        );
+    }
+}
+
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
