@@ -37,6 +37,7 @@ protected:
 	void Mouse(const struct FInputActionValue& Value);
 	void Move(const struct FInputActionValue& Value);
 	void PlayFootstep();
+	void PlayPhoto();
 	void RightClick(const struct FInputActionValue& Value);
 	void Interact(const struct FInputActionValue& Value);
 
@@ -84,6 +85,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Audio")
 	USoundBase* FootstepSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* PhotoSound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Footsteps")
 	float MovementSpeedThreshold = 10.f;
 

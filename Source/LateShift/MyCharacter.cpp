@@ -96,6 +96,15 @@ void AMyCharacter::PlayFootstep()
     );
 }
 
+void AMyCharacter::PlayPhoto()
+{
+    UGameplayStatics::PlaySoundAtLocation(
+        this,
+        PhotoSound,
+        GetActorLocation()
+    );
+}
+
 void AMyCharacter::Mouse(const FInputActionValue& Value)
 {
     FVector2D Input = Value.Get<FVector2D>();
@@ -157,6 +166,7 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
         false
     );
 
+    PlayPhoto();
     StartCameraFlashSequence();
 
     ETraceTypeQuery channel = UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel1);   
