@@ -225,7 +225,7 @@ void AMyCharacter::RightClick(const FInputActionValue& Value) {
         channel,
         true,
         {},
-        EDrawDebugTrace::None,
+        EDrawDebugTrace::ForDuration,
         hitResult,
         true
         );
