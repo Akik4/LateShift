@@ -2,6 +2,7 @@
 
 
 #include "LateShiftInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 ULateShiftInstance::ULateShiftInstance() {
 		looped = 0;
@@ -27,5 +28,31 @@ void ULateShiftInstance::RemoveLooped()
 int ULateShiftInstance::GetLooped()
 {
 	return looped;
+}
+
+void ULateShiftInstance::ShowMainMenu()
+{
+    MainMenuInstance = CreateWidget<UUserWidget>(this, MainMenuClass);
+    MainMenuInstance->AddToViewport();
+
+    // Show mouse cursor
+    if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+    {
+        PC->bShowMouseCursor = true;
+        PC->SetInputMode(FInputModeUIOnly());
+    }
+}
+
+void ULateShiftInstance::StartGame()
+{
+    if (UWorld* World = GetWorld())
+    {
+        UGameplayStatics::OpenLevel(World, FName("default_map"));
+    }
+}
+
+void ULateShiftInstance::QuitGame()
+{
+    UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, true);
 }
 

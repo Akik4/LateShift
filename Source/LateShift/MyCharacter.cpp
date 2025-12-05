@@ -2,6 +2,7 @@
 
 
 #include "MyCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -83,6 +84,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::Move(const FInputActionValue& Value)
 {
+    if (bIsPaused) return;
     FVector2D Input = Value.Get<FVector2D>();
 
     AddMovementInput(GetActorForwardVector(), Input.Y * velocity);
@@ -109,6 +111,7 @@ void AMyCharacter::PlayPhoto()
 
 void AMyCharacter::Mouse(const FInputActionValue& Value)
 {
+    if (bIsPaused) return;
     FVector2D Input = Value.Get<FVector2D>();
 
     AddControllerYawInput(Input.X * sensitivity);
@@ -309,6 +312,52 @@ void AMyCharacter::HandleFlashStep()
 }
 
 
+void AMyCharacter::TogglePause(const FInputActionValue& Value)
+{
+    APlayerController* PC = Cast<APlayerController>(GetController());
+    if (!PC) return;
+
+    bIsPaused = !bIsPaused;
+
+    if (bIsPaused)
+    {
+        if (!PauseMenuInstance && PauseMenuClass)
+        {
+            PauseMenuInstance = CreateWidget<UPauseMenuWidget>(PC, PauseMenuClass);
+        }
+
+        if (PauseMenuInstance && !PauseMenuInstance->IsInViewport())
+        {
+            PauseMenuInstance->AddToViewport();
+        }
+
+        FInputModeGameAndUI InputMode;
+        InputMode.SetWidgetToFocus(PauseMenuInstance->TakeWidget());
+        InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+        PC->SetInputMode(InputMode);
+
+        PC->bShowMouseCursor = true;
+        PC->SetPause(true);
+
+    }
+    else
+    {
+        if (PauseMenuInstance && PauseMenuInstance->IsInViewport())
+        {
+            PauseMenuInstance->RemoveFromParent();
+        }
+
+        FInputModeGameOnly InputMode;
+        PC->SetInputMode(InputMode);
+
+        PC->bShowMouseCursor = false;
+        PC->SetPause(false);
+    }
+}
+
+
+
+
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -319,6 +368,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     EnhancedInput->BindAction(MouseAction, ETriggerEvent::Triggered, this, &AMyCharacter::Mouse);
     EnhancedInput->BindAction(MouseClick, ETriggerEvent::Started, this, &AMyCharacter::RightClick);
     EnhancedInput->BindAction(IA_Interact, ETriggerEvent::Started, this, &AMyCharacter::Interact);
+    EnhancedInput->BindAction(IA_Pause, ETriggerEvent::Started, this, &AMyCharacter::TogglePause);
 }
 
 
