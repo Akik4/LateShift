@@ -6,6 +6,7 @@
 #include "EngineUtils.h" // <-- needed for TActorIterator
 #include "LateShift/controllers/anomalies.h"
 #include "LateShift/Next.h"
+#include "LateShift/NextInterface.h"
 #include "LateShift/LateShiftInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "LateShift/MyGameStateBase.h"
@@ -134,6 +135,15 @@ public:
 	TSubclassOf<UPauseMenuWidget> PauseMenuClass;
 
 	UPauseMenuWidget* PauseMenuInstance = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UNextInterface> NextInterfaceClass;
+	UNextInterface* NextInstance = nullptr;
+
+	FTimerHandle DelayHandle;
+
+	void MyDelayedFunction();
+
 
 	bool bIsPaused = false;
 

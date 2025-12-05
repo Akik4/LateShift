@@ -44,6 +44,37 @@ void AMyCharacter::BeginPlay()
             Subsystem->AddMappingContext(InputMappingContext, 0);
         }
     }
+
+    if (!NextInstance && NextInterfaceClass)
+    {
+        NextInstance = CreateWidget<UNextInterface>(PC, NextInterfaceClass);
+    }
+
+    if (NextInstance && !NextInstance->IsInViewport())
+    {
+        ULateShiftInstance* GI = GetGameInstance<ULateShiftInstance>();
+        if (GI->GetLooped() == 7) {
+            NextInstance->SetLabel("You win");
+            NextInstance->AddToViewport();
+        }
+        else {
+            NextInstance->SetLabel(FString::FromInt(GI->GetLooped()));
+            NextInstance->AddToViewport();
+
+            GetWorld()->GetTimerManager().SetTimer(
+                DelayHandle,
+                this,
+                &AMyCharacter::MyDelayedFunction,
+                2.f,    // delay in seconds
+                false    // no loop
+            );
+        }
+    }
+}
+
+void AMyCharacter::MyDelayedFunction()
+{
+    NextInstance->RemoveFromParent();
 }
 
 // Called every frame
@@ -184,7 +215,7 @@ void AMyCharacter::Interact(const FInputActionValue& value)
             else {
                 UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), true);
                 if (GI->GetLooped() > 1) {
-                    GI->RemoveLooped();
+                    GI->SetLooped(1);
                 }
                 GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("LOSE"));
             }
