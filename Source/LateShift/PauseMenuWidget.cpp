@@ -39,11 +39,12 @@ void UPauseMenuWidget::OnExitClicked()
     if (PC)
     {
         // Quits the game (works in editor and packaged builds)
-        UKismetSystemLibrary::QuitGame(
+        UGameplayStatics::OpenLevel(this, FName("main_menu"), true);
+        /*UKismetSystemLibrary::QuitGame(
             GetWorld(),
             PC,
             EQuitPreference::Quit,
             true
-        );
+        );*/
     }
 }

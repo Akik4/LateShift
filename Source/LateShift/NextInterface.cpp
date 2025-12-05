@@ -14,7 +14,7 @@ void UNextInterface::SetLabel(const FString& NewText)
 void UNextInterface::SetSubLabel(const int text)
 {
     FString val = "test";
-    if (text == 0) val = "I just been hired. I should know this place";
+    if (text == 0) val = "I just been hired. I should discover this place";
     if (text == 1) val = "I feel like somethings is different";
     if (text > 1) val = "";
 

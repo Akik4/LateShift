@@ -58,7 +58,7 @@ void AMyCharacter::BeginPlay()
             NextInstance->AddToViewport();
         }
         else {
-            NextInstance->SetLabel(FString::FromInt(GI->GetLooped()));
+            NextInstance->SetLabel("Day " + FString::FromInt(GI->GetLooped() + 1));
             NextInstance->SetSubLabel(GI->GetLooped());
             NextInstance->AddToViewport();
 
