@@ -59,13 +59,14 @@ void AMyCharacter::BeginPlay()
         }
         else {
             NextInstance->SetLabel(FString::FromInt(GI->GetLooped()));
+            NextInstance->SetSubLabel(GI->GetLooped());
             NextInstance->AddToViewport();
 
             GetWorld()->GetTimerManager().SetTimer(
                 DelayHandle,
                 this,
                 &AMyCharacter::MyDelayedFunction,
-                2.f,    // delay in seconds
+                5.f,    // delay in seconds
                 false    // no loop
             );
         }

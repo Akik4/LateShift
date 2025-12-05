@@ -20,7 +20,17 @@ public:
     UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
     UTextBlock* LabelText;
 
+    UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+    UTextBlock* SubLabelText;
+
+
     // Function to set text
     UFUNCTION(BlueprintCallable)
     void SetLabel(const FString& NewText);
+
+
+
+    // Function to set text
+    UFUNCTION(BlueprintCallable)
+    void SetSubLabel(const int text);
 };
